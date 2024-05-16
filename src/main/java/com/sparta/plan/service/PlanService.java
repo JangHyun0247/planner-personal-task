@@ -5,7 +5,6 @@ import com.sparta.plan.dto.PlanResponseDto;
 import com.sparta.plan.entity.Plan;
 import com.sparta.plan.repository.PlanRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -31,6 +30,10 @@ public class PlanService {
     public PlanResponseDto findPlan(Long id) {
         Plan plan = findById(id);
         return new PlanResponseDto(plan);
+    }
+
+    public List<PlanResponseDto> getPlans() {
+        return planRepository.findAllByOrderByModifiedAtDesc().stream().map(PlanResponseDto::new).toList();
     }
 
     private Plan findById(Long id) {

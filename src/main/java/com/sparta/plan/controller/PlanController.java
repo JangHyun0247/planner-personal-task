@@ -29,5 +29,10 @@ public class PlanController {
         return planService.findPlan(id);
     }
 
+    @GetMapping("/memos")
+    public List<PlanResponseDto> getPlans(){
+        return planService.getPlans();
+    }
+
 
 }
