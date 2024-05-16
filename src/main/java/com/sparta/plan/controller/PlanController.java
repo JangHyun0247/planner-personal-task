@@ -2,11 +2,11 @@ package com.sparta.plan.controller;
 
 import com.sparta.plan.dto.PlanRequestDto;
 import com.sparta.plan.dto.PlanResponseDto;
+import com.sparta.plan.entity.Plan;
 import com.sparta.plan.service.PlanService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -23,4 +23,11 @@ public class PlanController {
     public PlanResponseDto createPlan(@RequestBody PlanRequestDto requestDto){
         return planService.createPlan(requestDto);
     }
+
+    @GetMapping("/plans/{id}")
+    public PlanResponseDto findPlan(@PathVariable Long id){
+        return planService.findPlan(id);
+    }
+
+
 }

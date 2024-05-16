@@ -6,6 +6,8 @@ import com.sparta.plan.entity.Plan;
 import com.sparta.plan.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PlanService {
 
@@ -24,5 +26,16 @@ public class PlanService {
         PlanResponseDto responseDto = new PlanResponseDto(savePlan);
 
         return responseDto;
+    }
+
+    public PlanResponseDto findPlan(Long id) {
+        Plan plan = findById(id);
+        return new PlanResponseDto(plan);
+    }
+
+    private Plan findById(Long id) {
+        return planRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
+        );
     }
 }
