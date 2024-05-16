@@ -29,9 +29,19 @@ public class PlanController {
         return planService.findPlan(id);
     }
 
-    @GetMapping("/memos")
+    @GetMapping("/plans")
     public List<PlanResponseDto> getPlans(){
         return planService.getPlans();
+    }
+
+    @PutMapping("/plans/{id}")
+    public Long updatePlan(@PathVariable Long id, @RequestBody PlanRequestDto requestDto){
+        return planService.updatePlan(id, requestDto);
+    }
+
+    @DeleteMapping("/plans/{id}")
+    public Long deletePlan(@PathVariable Long id, @RequestBody PlanRequestDto requestDto){
+        return planService.deletePlan(id, requestDto);
     }
 
 

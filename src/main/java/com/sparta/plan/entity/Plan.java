@@ -23,7 +23,7 @@ public class Plan extends Timestamped {
     private String contents;
 
     //담당자
-    @Column(name = "user")
+    @Column(name = "user" , nullable = false)
     private String user;
 
     //비밀번호
@@ -38,4 +38,9 @@ public class Plan extends Timestamped {
     }
 
 
+    public void update(PlanRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.user = requestDto.getUser();
+    }
 }

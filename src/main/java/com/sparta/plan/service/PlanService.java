@@ -5,6 +5,8 @@ import com.sparta.plan.dto.PlanResponseDto;
 import com.sparta.plan.entity.Plan;
 import com.sparta.plan.repository.PlanRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -34,6 +36,24 @@ public class PlanService {
 
     public List<PlanResponseDto> getPlans() {
         return planRepository.findAllByOrderByModifiedAtDesc().stream().map(PlanResponseDto::new).toList();
+    }
+
+    @Transactional
+    public Long updatePlan(Long id, PlanRequestDto requestDto) {
+        Plan plan = findById(id);
+        //입력 받은 패스워드와 저장 되어 있는 패스워드가 동일한지 검사
+        if (requestDto.getPassword().equals(plan.getPassword())) {
+            plan.update(requestDto);
+        }
+        return id;
+    }
+
+    public Long deletePlan(Long id, PlanRequestDto requestDto) {
+        Plan plan = findById(id);
+        if(requestDto.getPassword().equals(plan.getPassword())) {
+            planRepository.delete(plan);
+        }
+        return id;
     }
 
     private Plan findById(Long id) {
