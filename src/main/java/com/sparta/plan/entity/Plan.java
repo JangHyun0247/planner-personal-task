@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "plan")
@@ -29,6 +32,10 @@ public class Plan extends Timestamped {
     //비밀번호
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "comment_id", nullable = false)
+    private List<Comment> commentList = new ArrayList<>();
 
     public Plan(PlanRequestDto planRequestDto) {
         this.title = planRequestDto.getTitle();

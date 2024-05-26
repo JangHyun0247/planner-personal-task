@@ -30,7 +30,7 @@ planService 에 requestDto 를 받아 반환
 ____
 <요청 Dto, entity 를 통해 응답 Dto 에게 전달하기 위해>
 
-* 요청 데이터를 entity 를 가져와서 savePlan 에 넣고 응답 dto 에게 전달
+* 요청 데이터를, entity 를 가져와서 savePlan 에 넣고 응답 dto 에게 전달
 
 
 ## dto 패키지의 ResponseDto 와 RequestDto
