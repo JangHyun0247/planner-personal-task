@@ -13,8 +13,10 @@ import java.util.List;
 @Table(name = "plan")
 @NoArgsConstructor
 public class Plan extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "plan_id")
     private Long id;
 
     //할일 제목
@@ -33,9 +35,6 @@ public class Plan extends Timestamped {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "comment_id", nullable = false)
-    private List<Comment> commentList = new ArrayList<>();
 
     public Plan(PlanRequestDto planRequestDto) {
         this.title = planRequestDto.getTitle();
