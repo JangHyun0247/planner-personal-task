@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentResponseDto {
     private String contents;
-    private String author;
+    private String userName;
     private LocalDateTime createdAt;
 
     public CommentResponseDto(Comment comment) {
         this.contents = comment.getContents();
-        this.author = comment.getAuthor();
+        this.userName = comment.getUserName();
         this.createdAt = comment.getCreatedAt();
     }
 }

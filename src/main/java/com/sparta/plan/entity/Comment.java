@@ -1,12 +1,10 @@
 package com.sparta.plan.entity;
 
-import com.sparta.plan.dto.CommentRequestDto;
+import com.sparta.plan.dto.CommentCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,16 +25,16 @@ public class Comment extends Timestamped {
 
     //사용자 이름 - String
     @Column(nullable = false)
-    private String author;
+    private String userName;
 
     //일정 아이디
     @ManyToOne //자식이 부모를 볼 때
     @JoinColumn(name = "plan_id", nullable = false)
     private Plan plan;
 
-    public Comment(CommentRequestDto commentRequestDto, Plan plan){
-        this.contents = commentRequestDto.getContents();
-        this.author = commentRequestDto.getAuthor();
+    public Comment(CommentCreateRequestDto commentCreateRequestDto, Plan plan){
+        this.contents = commentCreateRequestDto.getContents();
+        this.userName = commentCreateRequestDto.getGetUserName();
         this.plan = plan;
     }
 

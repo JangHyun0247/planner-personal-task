@@ -1,7 +1,9 @@
 package com.sparta.plan.service;
 
-import com.sparta.plan.dto.CommentRequestDto;
+import com.sparta.plan.dto.CommentCreateRequestDto;
+import com.sparta.plan.dto.CommentDeleteRequestDto;
 import com.sparta.plan.dto.CommentResponseDto;
+import com.sparta.plan.dto.CommentUpdateRequestDto;
 import com.sparta.plan.entity.Comment;
 import com.sparta.plan.entity.Plan;
 import com.sparta.plan.repository.CommentRepository;
@@ -22,21 +24,21 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto createComment(CommentRequestDto commentRequestDto) {
+    public CommentResponseDto createComment(CommentCreateRequestDto commentCreateRequestDto) {
 
-        if (commentRequestDto.getPlanId() == null) {
+        if (commentCreateRequestDto.getPlanId() == null) {
             throw new IllegalArgumentException("댓글을 넣으려는 일정 ID 를 입력해주세요.");
         }
 
-        Plan plan = planRepository.findById(commentRequestDto.getPlanId()).orElseThrow(
+        Plan plan = planRepository.findById(commentCreateRequestDto.getPlanId()).orElseThrow(
                 () -> new IllegalArgumentException("DB 에 입력한 ID 의 일정을 찾아볼 수 없습니다.")
         );
 
-        if (commentRequestDto.getContents() == null || commentRequestDto.getContents().isEmpty()) {
+        if (commentCreateRequestDto.getContents() == null || commentCreateRequestDto.getContents().isEmpty()) {
             throw new IllegalArgumentException("댓글 내용을 입력해주세요.");
         }
 
-        Comment comment = new Comment(commentRequestDto, plan);
+        Comment comment = new Comment(commentCreateRequestDto, plan);
 
         Comment saveComment = commentRepository.save(comment);
 
@@ -46,57 +48,33 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(CommentUpdateRequestDto requestDto) {
 
-        if (commentRequestDto.getCommentId() == null) {
-            throw new IllegalArgumentException("댓글 ID 를 입력해주세요.");
-        }
+        Comment comment = findById(requestDto.getPlanId(), requestDto.getCommentId());
 
-        if (commentRequestDto.getPlanId() == null) {
-            throw new IllegalArgumentException("일정 ID 를 입력해주세요.");
-        }
 
-        Plan findPlan = planRepository.findById(commentRequestDto.getPlanId()).orElseThrow(
-                () -> new IllegalArgumentException("DB 에서 일정을 찾아볼 수 없습니다.")
-        );
-
-        Comment comment = commentRepository.findByPlanIdAndId (findPlan.getId(),commentRequestDto.getCommentId()).orElseThrow(
-                () -> new IllegalArgumentException("DB 에서 댓글을 찾을 수 없습니다.")
-        );
-
-        if (!comment.getAuthor().equals(commentRequestDto.getAuthor())) {
+        if (!comment.getUserName().equals(requestDto.getGetUserName())) {
             throw new IllegalArgumentException("현재 사용자가 댓글 작성자가 아닙니다.");
         }
 
-        if (commentRequestDto.getContents() == null || commentRequestDto.getContents().isEmpty()) {
-            throw new IllegalArgumentException("댓글 내용을 입력해주세요.");
-        }
-
-        comment.updateContent(commentRequestDto.getContents());
+        comment.updateContent(requestDto.getContents());
         return new CommentResponseDto(comment);
     }
 
-    public void deleteComment(CommentRequestDto commentRequestDto) {
+    public void deleteComment(CommentDeleteRequestDto requestDto) {
 
-        if (commentRequestDto.getCommentId() == null) {
-            throw new IllegalArgumentException("댓글 ID 를 입력해주세요.");
-        }
+        Comment comment = findById(requestDto.getPlanId(), requestDto.getCommentId());
 
-        if (commentRequestDto.getPlanId() == null) {
-            throw new IllegalArgumentException("일정 ID 를 입력해주세요.");
-        }
-
-        Plan findPlan = planRepository.findById(commentRequestDto.getPlanId()).orElseThrow(
-                () -> new IllegalArgumentException("DB 에 입력한 ID 의 일정을 찾아볼 수 없습니다.")
-        );
-
-        Comment comment = commentRepository.findByPlanIdAndId (findPlan.getId(),commentRequestDto.getCommentId()).orElseThrow(
-                () -> new IllegalArgumentException("DB 에서 입력한 ID 의 댓글을 찾을 수 없습니다.")
-        );
-
-        if (!comment.getAuthor().equals(commentRequestDto.getAuthor())) {
+        if (!comment.getUserName().equals(requestDto.getGetUserName())) {
             throw new IllegalArgumentException("현재 사용자가 댓글 작성자가 아닙니다.");
         }
+
         commentRepository.delete(comment);
+    }
+
+    private Comment findById(Long planId, Long commentId){
+        return commentRepository.findByPlanIdAndId(planId, commentId).orElseThrow(() ->
+                new IllegalArgumentException("DB 에서 해당 ID 의 댓글을 찾아볼 수가 없습니다.")
+        );
     }
 }

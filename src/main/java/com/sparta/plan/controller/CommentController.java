@@ -1,8 +1,11 @@
 package com.sparta.plan.controller;
 
-import com.sparta.plan.dto.CommentRequestDto;
+import com.sparta.plan.dto.CommentCreateRequestDto;
+import com.sparta.plan.dto.CommentDeleteRequestDto;
 import com.sparta.plan.dto.CommentResponseDto;
+import com.sparta.plan.dto.CommentUpdateRequestDto;
 import com.sparta.plan.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,24 +14,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
     @PostMapping("/comments")
-    public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto) {
-        return commentService.createComment(commentRequestDto);
+    public CommentResponseDto createComment(@Valid @RequestBody CommentCreateRequestDto requestDto) {
+        return commentService.createComment(requestDto);
     }
 
     @PutMapping("/comments")
-    public CommentResponseDto updateComment(@RequestBody CommentRequestDto commentRequestDto){
-        return commentService.updateComment(commentRequestDto);
+    public CommentResponseDto updateComment(@Valid @RequestBody CommentUpdateRequestDto requestDto){
+        return commentService.updateComment(requestDto);
     }
     @DeleteMapping("/comments")
-    public ResponseEntity<String> deleteComment(@RequestBody CommentRequestDto commentRequestDto) {
-        commentService.deleteComment(commentRequestDto);
+    public ResponseEntity<String> deleteComment(@Valid @RequestBody CommentDeleteRequestDto requestDto) {
+        commentService.deleteComment(requestDto);
         return new ResponseEntity<>("댓글이 성공적으로 삭제되었습니다.", HttpStatus.OK);
     }
 }
