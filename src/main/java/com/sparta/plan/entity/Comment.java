@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -36,5 +38,9 @@ public class Comment extends Timestamped {
         this.contents = commentRequestDto.getContents();
         this.author = commentRequestDto.getAuthor();
         this.plan = plan;
+    }
+
+    public void updateContent(String contents) {
+        this.contents = contents;
     }
 }

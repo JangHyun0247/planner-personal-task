@@ -7,4 +7,5 @@ public class CommentRequestDto {
     private String contents;
     private String author;
     private Long planId;
+    private Long commentId;
 }
