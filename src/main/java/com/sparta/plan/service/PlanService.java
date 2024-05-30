@@ -1,7 +1,9 @@
 package com.sparta.plan.service;
 
-import com.sparta.plan.dto.PlanRequestDto;
-import com.sparta.plan.dto.PlanResponseDto;
+import com.sparta.plan.dto.planRequestDto.PlanCreateRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanDeleteRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanUpdateRequestDto;
+import com.sparta.plan.dto.responseDto.PlanResponseDto;
 import com.sparta.plan.entity.Plan;
 import com.sparta.plan.repository.PlanRepository;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,14 @@ public class PlanService {
         this.planRepository = planRepository;
     }
 
-    public PlanResponseDto createPlan(PlanRequestDto requestDto) {
+    @Transactional
+    public PlanResponseDto createPlan(PlanCreateRequestDto requestDto) {
 
         Plan plan = new Plan(requestDto);
 
         Plan savePlan = planRepository.save(plan);
 
-        PlanResponseDto responseDto = new PlanResponseDto(savePlan);
-
-        return responseDto;
+        return new PlanResponseDto(savePlan);
     }
 
     public PlanResponseDto findPlan(Long id) {
@@ -39,21 +40,22 @@ public class PlanService {
     }
 
     @Transactional
-    public Long updatePlan(Long id, PlanRequestDto requestDto) {
-        Plan plan = findById(id);
+    public PlanResponseDto updatePlan(PlanUpdateRequestDto requestDto) {
+        Plan plan = findById(requestDto.getId());
         //입력 받은 패스워드와 저장 되어 있는 패스워드가 동일한지 검사
         if (requestDto.getPassword().equals(plan.getPassword())) {
             plan.update(requestDto);
         }
-        return id;
+        return new PlanResponseDto(plan);
     }
 
-    public Long deletePlan(Long id, PlanRequestDto requestDto) {
-        Plan plan = findById(id);
+    public void deletePlan(PlanDeleteRequestDto requestDto) {
+        Plan plan = findById(requestDto.getId());
         if(requestDto.getPassword().equals(plan.getPassword())) {
             planRepository.delete(plan);
         }
-        return id;
+
+        planRepository.delete(plan);
     }
 
     private Plan findById(Long id) {

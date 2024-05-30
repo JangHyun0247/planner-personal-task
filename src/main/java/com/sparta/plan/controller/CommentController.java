@@ -1,9 +1,9 @@
 package com.sparta.plan.controller;
 
-import com.sparta.plan.dto.CommentCreateRequestDto;
-import com.sparta.plan.dto.CommentDeleteRequestDto;
-import com.sparta.plan.dto.CommentResponseDto;
-import com.sparta.plan.dto.CommentUpdateRequestDto;
+import com.sparta.plan.dto.commentRequestDto.CommentCreateRequestDto;
+import com.sparta.plan.dto.commentRequestDto.CommentDeleteRequestDto;
+import com.sparta.plan.dto.responseDto.CommentResponseDto;
+import com.sparta.plan.dto.commentRequestDto.CommentUpdateRequestDto;
 import com.sparta.plan.service.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

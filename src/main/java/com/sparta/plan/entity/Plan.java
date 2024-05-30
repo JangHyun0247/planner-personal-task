@@ -1,6 +1,7 @@
 package com.sparta.plan.entity;
 
-import com.sparta.plan.dto.PlanRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanCreateRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,15 +34,15 @@ public class Plan extends Timestamped {
     private String password;
 
 
-    public Plan(PlanRequestDto planRequestDto) {
-        this.title = planRequestDto.getTitle();
-        this.contents = planRequestDto.getContents();
-        this.user = planRequestDto.getUser();
-        this.password = planRequestDto.getPassword();
+    public Plan(PlanCreateRequestDto planCreateRequestDto) {
+        this.title = planCreateRequestDto.getTitle();
+        this.contents = planCreateRequestDto.getContents();
+        this.user = planCreateRequestDto.getUser();
+        this.password = planCreateRequestDto.getPassword();
     }
 
 
-    public void update(PlanRequestDto requestDto) {
+    public void update(PlanUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.user = requestDto.getUser();

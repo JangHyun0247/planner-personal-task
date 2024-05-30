@@ -1,9 +1,12 @@
 package com.sparta.plan.controller;
 
-import com.sparta.plan.dto.PlanRequestDto;
-import com.sparta.plan.dto.PlanResponseDto;
-import com.sparta.plan.entity.Plan;
+import com.sparta.plan.dto.planRequestDto.PlanCreateRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanDeleteRequestDto;
+import com.sparta.plan.dto.planRequestDto.PlanUpdateRequestDto;
+import com.sparta.plan.dto.responseDto.PlanResponseDto;
 import com.sparta.plan.service.PlanService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +23,19 @@ public class PlanController {
 
     @PostMapping("/plans")
     //@RequestBody 요청 데이터(JSON 이든 뭐든)를 PlanRequestDto 객체로 바꿔주는 역할, 내부적으로 Jackson 라이브러리 쓴다
-    public PlanResponseDto createPlan(@RequestBody PlanRequestDto requestDto){
+    public PlanResponseDto createPlan(@RequestBody PlanCreateRequestDto requestDto){
         return planService.createPlan(requestDto);
+    }
+
+    @PutMapping("/plans")
+    public PlanResponseDto updatePlan(@RequestBody PlanUpdateRequestDto requestDto){
+        return planService.updatePlan(requestDto);
+    }
+
+    @DeleteMapping("/plans")
+    public ResponseEntity<String> deletePlan(@RequestBody PlanDeleteRequestDto requestDto){
+        planService.deletePlan(requestDto);
+        return new ResponseEntity<>("일정이 성공적으로 삭제되었습니다.", HttpStatus.OK);
     }
 
     @GetMapping("/plans/{id}")
@@ -32,16 +46,6 @@ public class PlanController {
     @GetMapping("/plans")
     public List<PlanResponseDto> getPlans(){
         return planService.getPlans();
-    }
-
-    @PutMapping("/plans/{id}")
-    public Long updatePlan(@PathVariable Long id, @RequestBody PlanRequestDto requestDto){
-        return planService.updatePlan(id, requestDto);
-    }
-
-    @DeleteMapping("/plans/{id}")
-    public Long deletePlan(@PathVariable Long id, @RequestBody PlanRequestDto requestDto){
-        return planService.deletePlan(id, requestDto);
     }
 
 

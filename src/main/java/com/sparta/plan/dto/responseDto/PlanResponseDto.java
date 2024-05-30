@@ -1,4 +1,4 @@
-package com.sparta.plan.dto;
+package com.sparta.plan.dto.responseDto;
 
 import com.sparta.plan.entity.Plan;
 import lombok.Getter;
@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 //return, 응답, 빈환
 public class PlanResponseDto {
     private Long id;
+    private String user;
     private String title;
     private String contents;
-    private String user;
     private LocalDateTime createdAt;
 
     public PlanResponseDto(Plan plan) {

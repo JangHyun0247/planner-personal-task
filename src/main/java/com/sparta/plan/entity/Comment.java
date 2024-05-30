@@ -1,6 +1,6 @@
 package com.sparta.plan.entity;
 
-import com.sparta.plan.dto.CommentCreateRequestDto;
+import com.sparta.plan.dto.commentRequestDto.CommentCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public class Comment extends Timestamped {
 
     public Comment(CommentCreateRequestDto commentCreateRequestDto, Plan plan){
         this.contents = commentCreateRequestDto.getContents();
-        this.userName = commentCreateRequestDto.getGetUserName();
+        this.userName = commentCreateRequestDto.getUserName();
         this.plan = plan;
     }
 
