@@ -8,17 +8,15 @@ import java.time.LocalDateTime;
 @Getter
 //return, 응답, 빈환
 public class PlanResponseDto {
-    private Long id;
-    private String user;
+    private Long planid;
     private String title;
     private String contents;
     private LocalDateTime createdAt;
 
     public PlanResponseDto(Plan plan) {
-        this.id = plan.getId();
+        this.planid = plan.getPlanId();
         this.title = plan.getTitle();
         this.contents = plan.getContents();
-        this.user = plan.getUser();
         this.createdAt = plan.getCreatedAt();
     }
 }

@@ -6,7 +6,5 @@ import lombok.Getter;
 //requestDto 는 클라이언트의 요청 데이터 전달
 @Getter
 public class PlanDeleteRequestDto {
-    private Long id;
-    private String user;
-    private String password;
+    private Long planId;
 }

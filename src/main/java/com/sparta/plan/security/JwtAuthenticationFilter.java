@@ -9,9 +9,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -39,7 +41,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             null
                     )
             );
-        } catch (IOException e) {
+        }
+        catch (BadCredentialsException e){
+            log.error(e.getMessage());
+            throw new UsernameNotFoundException("회원을 찾을 수 없습니다.");
+        }
+
+        catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }

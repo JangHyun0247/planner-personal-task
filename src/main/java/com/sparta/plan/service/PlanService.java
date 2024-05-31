@@ -5,6 +5,7 @@ import com.sparta.plan.dto.planRequestDto.PlanDeleteRequestDto;
 import com.sparta.plan.dto.planRequestDto.PlanUpdateRequestDto;
 import com.sparta.plan.dto.responseDto.PlanResponseDto;
 import com.sparta.plan.entity.Plan;
+import com.sparta.plan.entity.User;
 import com.sparta.plan.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,9 @@ public class PlanService {
         this.planRepository = planRepository;
     }
 
-    @Transactional
-    public PlanResponseDto createPlan(PlanCreateRequestDto requestDto) {
+    public PlanResponseDto createPlan(PlanCreateRequestDto requestDto, User user) {
 
-        Plan plan = new Plan(requestDto);
+        Plan plan = new Plan(requestDto, user);
 
         Plan savePlan = planRepository.save(plan);
 
@@ -40,18 +40,18 @@ public class PlanService {
     }
 
     @Transactional
-    public PlanResponseDto updatePlan(PlanUpdateRequestDto requestDto) {
-        Plan plan = findById(requestDto.getId());
+    public PlanResponseDto updatePlan(PlanUpdateRequestDto requestDto, User user) {
+        Plan plan = findById(requestDto.getPlanId());
         //입력 받은 패스워드와 저장 되어 있는 패스워드가 동일한지 검사
-        if (requestDto.getPassword().equals(plan.getPassword())) {
+        if (plan.getUser().getPassword().equals(user.getPassword())){
             plan.update(requestDto);
         }
         return new PlanResponseDto(plan);
     }
 
-    public void deletePlan(PlanDeleteRequestDto requestDto) {
-        Plan plan = findById(requestDto.getId());
-        if(requestDto.getPassword().equals(plan.getPassword())) {
+    public void deletePlan(PlanDeleteRequestDto requestDto, User user) {
+        Plan plan = findById(requestDto.getPlanId());
+        if(plan.getUser().getPassword().equals(user.getPassword())) {
             planRepository.delete(plan);
         }
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
@@ -67,7 +68,7 @@ public class JwtUtil {
             token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20");
 
             // 응답 헤더에 JWT 추가
-            res.addHeader(AUTHORIZATION_HEADER, "Bearer " + token);
+            res.addHeader(AUTHORIZATION_HEADER, token);
 
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
@@ -100,9 +101,13 @@ public class JwtUtil {
 
     // header 에서 JWT 가져오기
     public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+        String token = request.getHeader(AUTHORIZATION_HEADER);
+        if (token != null) {
+            try {
+                return URLDecoder.decode(token, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                return null;
+            }
         }
         return null;
     }
@@ -129,7 +134,11 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String getTokenFromRequest(HttpServletRequest req) {
-        return null;
+    // JWT 토큰 substring
+    public String substringToken(String tokenValue) {
+        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
+            return tokenValue.substring(7);
+        }
+        throw new NullPointerException("Not Found Token");
     }
 }

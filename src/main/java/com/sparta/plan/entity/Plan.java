@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "plan")
@@ -15,7 +18,7 @@ public class Plan extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plan_id")
-    private Long id;
+    private Long planId;
 
     //할일 제목
     @Column(name = "title", nullable = false)
@@ -25,26 +28,22 @@ public class Plan extends Timestamped {
     @Column(name = "contents")
     private String contents;
 
-    //담당자
-    @Column(name = "user" , nullable = false)
-    private String user;
+    @OneToMany(mappedBy = "plan")
+    private final List<Comment> comments = new ArrayList<>();
 
-    //비밀번호
-    @Column(name = "password", nullable = false)
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-
-    public Plan(PlanCreateRequestDto planCreateRequestDto) {
+    public Plan(PlanCreateRequestDto planCreateRequestDto, User user) {
         this.title = planCreateRequestDto.getTitle();
         this.contents = planCreateRequestDto.getContents();
-        this.user = planCreateRequestDto.getUser();
-        this.password = planCreateRequestDto.getPassword();
+        this.user = user;
     }
 
 
     public void update(PlanUpdateRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.user = requestDto.getUser();
     }
 }
